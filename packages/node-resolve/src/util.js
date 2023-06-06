@@ -100,6 +100,7 @@ export function getPackageInfo(options) {
     hasModuleSideEffects: () => null,
     hasPackageEntry: overriddenMain !== false || mainFields.indexOf('main') !== -1,
     packageBrowserField:
+    // return false or browser
       useBrowserOverrides &&
       typeof pkg.browser === 'object' &&
       Object.keys(pkg.browser).reduce((browser, key) => {
@@ -135,6 +136,8 @@ export function getPackageInfo(options) {
     packageInfo.browserMappedMain = true;
   } else {
     // index.node is technically a valid default entrypoint as well...
+    // !!! 绝对路径
+    // axios 中的 browser:{ require: 'xxx' , default : 'xxx' } 是不生效的，
     packageInfo.resolvedEntryPoint = resolve(pkgRoot, pkg.main || 'index.js');
     packageInfo.browserMappedMain = false;
   }

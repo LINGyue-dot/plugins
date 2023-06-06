@@ -41,6 +41,7 @@ const defaults = {
 };
 export const DEFAULTS = deepFreeze(deepMerge({}, defaults));
 
+// 传入 browser:true 引入的包是哪个？
 export function nodeResolve(opts = {}) {
   const { warnings } = handleDeprecatedOptions(opts);
 
@@ -114,6 +115,7 @@ export function nodeResolve(opts = {}) {
       }
     }
 
+    // 匹配 / 或者 \
     const parts = importee.split(/[/\\]/);
     let id = parts.shift();
     let isRelativeImport = false;
@@ -275,6 +277,8 @@ export function nodeResolve(opts = {}) {
 
     resolveId: {
       order: 'post',
+      // importee === source
+      // import 'xxx' from 'source'
       async handler(importee, importer, resolveOptions) {
         if (importee === ES6_BROWSER_EMPTY) {
           return importee;
@@ -292,6 +296,7 @@ export function nodeResolve(opts = {}) {
           importer = undefined;
         }
 
+        // source,undefined options
         const resolved = await resolveLikeNode(this, importee, importer, custom);
         if (resolved) {
           // This way, plugins may attach additional meta information to the
